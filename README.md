@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # BitLoot - 一个基于区块链交易Hash随机性的年会抽奖程序
 
 > 人民的信任是报刊赖以生存的条件，没有这种条件，报刊就会完全萎靡不振。——马克思(德)
@@ -38,3 +39,7 @@
 
 [1]:	https://www.zhihu.com/question/20941124 "比特币是怎样运行的"
 [2]:	http://en.wikipedia.org/wiki/SHA-2 "SHA-256-wiki"
+=======
+# BlockchainLuckyDraw
+BlockchainLuckyDraw
+>>>>>>> d3e38e6cd54c77bbebd4b10808e70de480b7ddad
