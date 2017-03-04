@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>BitLoot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="基于 Bitcoin Blockchain 的抽奖系统。">
+  <link rel="canonical" href="http://www.x86cow.com/">
+
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+  <meta property="og:image" content="/bitloot.png" />
+  <meta property="og:title" content="BitLoot" />
+  <meta property="og:description" content="BitLoot - 一个基于区块链交易Hash随机性的抽奖程序." />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+  <link rel="stylesheet" href="stylesheets/bootstrap-datetimepicker.min.css">
+  <link rel="stylesheet" href="stylesheets/font-awesome.min.css">
+  <link rel="stylesheet" href="stylesheets/style.css">
+
+  <script src="javascripts/jquery-1.11.0.min.js"></script>
+  <script src="javascripts/jquery.qrcode.min.js"></script>
+  <script src="javascripts/bootstrap.min.js"></script>
+  <script src="javascripts/bootstrap-datetimepicker.min.js"></script>
+  <script src="javascripts/bootstrap-datetimepicker.zh-CN.js"></script>
+  <script src="javascripts/sjcl.js"></script>
+  <script src="javascripts/bitloot.js"></script>
+  <script src="javascripts/common.js"></script>
+
+</head>
+<body>
+	<header>
+    	<h1><%= title %></h1>
+	</header>
+
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    	<div class="container-fluid">
+    	<div class="navbar-header">
+        	<a class="navbar-brand" href="#">Jiange</a>
+    	</div>
+    	<div>
+        <ul class="nav navbar-nav">
+            <li><a title="主页" href="/">主页</a></li>
+            <% if (user) { %>
+            <li><a title="创建新抽奖任务" href="/createTask">创建新抽奖任务</a></li>
+            <% } %>
+            <li><a title="验证历史抽奖结果 务" href="/verifyHistoryTask">验证历史抽奖结果</a></li>
+            <li><a title="查询最新区块号" href="/queryNewestBlock">查询最新区块号</a></li>
+            <li><a title="查询历史任务" href="/queryHistoryTask">查询历史任务</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <% if (user) { %>
+                <li><a title="登出" href="/logout"><span class="glyphicon glyphicon-log-in"></span> 登出</a></li>
+            <% } else { %>
+                <li><a title="登录" href="/login"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
+            <% } %>
+        </ul>
+    	</div>
+    	</div>
+	</nav>
+
+

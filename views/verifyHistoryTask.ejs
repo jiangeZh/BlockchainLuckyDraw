@@ -1,0 +1,88 @@
+<%- include header %>
+
+<div class="container">
+
+  <!--div class="page-header">
+    <a href=".">
+      <h1><i class="fa fa-ticket "></i> BitLoot</h1>
+    </a>
+  </div-->
+
+  <p class="lead">基于 Bitcoin Blockchain 的抽奖系统。</p>
+
+  <div id="raffle" class="hidden">
+    <div class="header">
+
+      <h3>
+        <span class="title"></span>
+        <small>目标block：<span class="target-block"></span>
+          (还剩<span class="blocks-left"><i class="fa fa-spinner fa-spin"></i></span>)</small>
+      </h3>
+    </div>
+
+    <div id="spinner" class="text-center">
+      <h1><i class="fa fa-spinner fa-spin"></i></h1>
+    </div>
+
+    <div id="error-box" class="alert alert-danger hidden">
+      <h5>Error</h5>
+      <p></p>
+    </div>
+
+    <div id="winner" class="alert alert-success hidden">
+      <p class="calculating-winner">计算中奖者... <i class="fa fa-spinner fa-spin"></i></p>
+      <div class="winner-found hidden">
+        <h2>抽奖结果: <span class="winning-tx"></span> !</h2>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div id="fill-parameters" class="row">
+
+    <div class="col-md-6">
+      <form id="create-raffle" class="form-horizontal" role="form">
+
+        <div class="form-group">
+          <label for="block" class="col-sm-3 control-label">目标区块</label>
+          <div class="col-sm-9">
+            <input required="required" type="number" min="0" class="form-control" id="block" name="block" placeholder=" 449388">
+            <span class="help-block">当出现该Block后计算中奖者</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="level" class="col-sm-3 control-label">奖品等级</label>
+          <div class="col-sm-9">
+            <input required="required" type="number" min="1" max="5" class="form-control unfocus" id="level" name="level"  placeholder="3" value="3">
+            <span class="help-block">奖品等级</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="winners" class="col-sm-3 control-label">中奖人数</label>
+          <div class="col-sm-9">
+            <input required="required" type="number" min="1" class="form-control unfocus" id="winners" name="winners"  placeholder="1" value="1">
+            <span class="help-block">中奖人数</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="mantotal" class="col-sm-3 control-label">总人数</label>
+          <div class="col-sm-9">
+            <input required="required" type="number" min="1" class="form-control unfocus" id="mantotal" name="mantotal" placeholder="100" value="100">
+            <span class="help-block">总人数</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" class="btn btn-create">开始抽奖</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<%- include footer %>

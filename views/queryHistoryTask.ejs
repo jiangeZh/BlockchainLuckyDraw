@@ -1,0 +1,31 @@
+<%- include header %>
+
+<table class="table table-striped">
+  <caption>查询历史任务</caption>
+  <thead>
+    <tr>
+      <th>开奖时间</th>
+      <th>开奖区块</th>
+      <th>奖品等级</th>
+      <th>奖品描述</th>
+      <th>奖品数量</th>
+      <th>参与人数</th>
+      <th>开奖结果</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for (var i = 0; i < tasks.length; ++i) { %>
+    <tr>
+      <td><%= tasks[i].time %></td>
+      <td><%= tasks[i].blockNum %></td>
+      <td><%= tasks[i].prizeInfo[0].prizeLevel %></td>
+      <td><%= tasks[i].prizeInfo[0].prizeDesc %></td>
+      <td><%= tasks[i].prizeInfo[0].prizeNum %></td>
+      <td><%= tasks[i].participatorNum %></td>
+      <td><%= tasks[i].prizeResult %></td>
+    </tr>
+    <% } %>
+  </tbody>
+</table>
+
+<%- include footer %>

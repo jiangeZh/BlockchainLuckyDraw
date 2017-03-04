@@ -1,0 +1,158 @@
+<%- include header %>
+
+<div class="container">
+  <div class="page-header">
+    <a href=".">
+      <h1><i class="fa fa-ticket "></i> BitLoot</h1>
+    </a>
+  </div>
+
+  <div id="raffle" class="hidden">
+    <div class="header">
+
+      <h3>
+        <span class="title"></span>
+        <small>目标block：<span class="target-block"></span>
+          (还剩<span class="blocks-left"><i class="fa fa-spinner fa-spin"></i></span>)</small>
+      </h3>
+    </div>
+
+    <div id="spinner" class="text-center">
+      <h1><i class="fa fa-spinner fa-spin"></i></h1>
+    </div>
+
+    <div id="error-box" class="alert alert-danger hidden">
+      <h5>Error</h5>
+      <p></p>
+    </div>
+
+    <div id="winner" class="alert alert-success hidden">
+      <p class="calculating-winner">计算中奖者... <i class="fa fa-spinner fa-spin"></i></p>
+      <div class="winner-found hidden">
+        <h2>抽奖结果: <span class="winning-tx"></span> !</h2>
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <ul id="myTab" class="nav nav-tabs">
+    <li class="active"><a href="#time" data-toggle="tab">指定开奖时间</a></li>
+    <li><a href="#block" data-toggle="tab">指定开奖区块号</a></li>
+  </ul>
+  <div id="myTabContent" class="tab-content">
+    <div class="col-md-6 tab-pane fade in active" id="time">
+      <form action="/createTask" method="post" class="form-horizontal" role="form">
+        <div class="form-group">
+          <label for="block" class="col-sm-3 control-label">最早开奖时间</label>
+          <div class="col-sm-9">
+            <input required="required" type="text" class="form-control" value="2017-05-20 13:14" id="datetimepicker" name="datetimepicker" readonly="readonly">
+            <span class="help-block">当该时间后计算中奖者</span>
+          </div>
+        </div>
+       <%- include createTaskForm %>
+     </form>            
+     <% if (success) { %>
+        <%= success %>
+     <% } %>
+     <% if (error) { %>
+        <%= error %>
+     <% } %>
+ 
+    </div>
+    <div class="col-md-6 tab-pane fade" id="block">
+      <form action="/createTask" method="post" class="form-horizontal" role="form">
+        <div class="form-group">
+          <label for="block" class="col-sm-3 control-label">开奖区块</label>
+          <div class="col-sm-9">
+            <input required="required" type="number" min="0" class="form-control" id="block" name="block" placeholder=" 449388">
+            <span class="help-block">当出现该Block后计算中奖者</span>
+          </div>
+        </div>
+       <%- include createTaskForm %>
+     </form>
+    </div>
+   </div>
+  </div>
+</div>
+
+<!--div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title" id="myModalLabel">新增</h4>
+      </div>
+      <div class="modal-body" id="inputDiv">
+        <div class="form-group">
+          <label for="txt_prizelevel">奖品信息(格式：奖品等级|奖品描述|奖品数量)</label>
+          <input required="required" type="number" name="txt_prizelevel" class="form-control" id="txt_prizelevel" placeholder="奖品等级">
+        </div>
+        <input type="button" id="addInput" value="添加">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+        <button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal" onclick="SetPrizeInfo()"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>
+      </div>
+    </div>
+  </div>
+</div-->
+
+
+
+
+<script>
+$(function(){
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            // Get the name of active tab
+            var activeTab = $(e.target).text(); 
+            // Get the name of previous tab
+            var previousTab = $(e.relatedTarget).text(); 
+            $(".active-tab span").html(activeTab);
+            $(".previous-tab span").html(previousTab);
+            });
+        });
+
+$('#datetimepicker').datetimepicker({
+    format: 'yyyy-mm-dd hh:ii',      /*此属性是显示顺序，还有显示顺序是mm-dd-yyyy*/
+    startDate: new Date()
+});
+
+/*
+//注册新增按钮的事件
+$("#prizeInfo_1").click(function () {
+     $("#myModalLabel").text("新增");
+      $('#myModal').modal();
+});
+
+//注册新增按钮的事件
+$("#prizeInfo_2").click(function () {
+     $("#myModalLabel").text("新增");
+      $('#myModal').modal();
+});
+
+function SetPrizeInfo(type){
+    var level=document.getElementById("txt_prizelevel").value;
+    var desc=document.getElementById("txt_prizedesc").value;
+    var total=document.getElementById("txt_prizetotal").value;
+    var info1=document.getElementById("prizeInfo_1");
+    var info2=document.getElementById("prizeInfo_2");
+    info1.value="level:" + level + "; desc:" + desc + "; total:" + total;
+    info2.value="level:" + level + "; desc:" + desc + "; total:" + total;
+}
+
+i = 1;
+document.getElementById("addInput").onclick=function(){
+    document.getElementById("inputDiv").innerHTML+='<div class="form-group" id="div_'+i+'"><label for="txt_prizelevel">奖品信息(格式：奖品等级|奖品描述|奖品数量)</label><input required="required" type="number" name="txt_prizelevel" class="form-control" id="txt_prizelevel_'+i+'" placeholder="奖品等级"><input type="button" value="删除"  onclick="del('+i+')"/></div>';
+    i = i + 1;
+}
+
+function del(o){
+     document.getElementById("inputDiv").removeChild(document.getElementById("div_"+o));
+}
+*/
+</script>
+
+<%- include footer %>
