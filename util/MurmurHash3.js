@@ -90,9 +90,6 @@ var MurmurHash3 = {
         mhash = mhash.mul(0xc2b2ae35).and(0xFFFFFFFF);
         mhash = mhash.xor(mhash.shiftRight(16));
     
-        console.log(mhash);
-        // 测试到此处
-
         hex_result = mhash.toString(16);
         if (hex_result.length < 8) {
             hex_result = "0" * (8 - hex_result.length) + hex_result;

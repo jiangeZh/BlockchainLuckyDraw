@@ -9,14 +9,12 @@ var EntropyCollector = {
     execute: function() {
         // Stream new entropy from blockchain.info.
         get_unconfirmed_transactions(url, function(err, transactions) {
-            console.log(err);
-            console.log(transactions);
             if (err) {
                 console.log(err);
                 return ;
             }
             // transactions undefined??
-            if (transactions.length > 0) {
+            if (transactions != undefined && transactions.length > 0) {
                 fill_queue(transactions);
             }   
         

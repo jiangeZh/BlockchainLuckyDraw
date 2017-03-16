@@ -1,131 +1,121 @@
 <%- include header %>
-<div class="container">
-
-  <div class="page-header">
-    <a href=".">
-      <h1><i class="fa fa-ticket "></i> 基于 Bitcoin Blockchain 的抽奖系统</h1>
-    </a>
+<div id="raffle">
+  <% if (error) { %>
+  <div id="error-box" class="alert alert-danger">
+    <h5> <%= error %> </h5>
+    <p></p>
   </div>
+  <% } %>
 
-  <div id="raffle">
-    <% if (error) { %>
-    <div id="error-box" class="alert alert-danger">
-      <h5> <%= error %> </h5>
-      <p></p>
-    </div>
-    <% } %>
-
-    <% if (randomNumList) { %>
-    <div id="randomNumList" class="alert alert-success">
-        <div>
-          <h3><%= rawInfo %></h3>
-          <h3>生成的随机数：<%= randomNumList %></h3>
-        </div>
-    </div>
-    <% } %>
+  <% if (randomNumList) { %>
+  <div id="randomNumList" class="alert alert-success">
+      <div>
+        <h3><%= rawInfo %></h3>
+        <h3>生成的随机数：<%= randomNumList %></h3>
+      </div>
   </div>
+  <% } %>
+</div>
 
 
-  <div id="fill-parameters" class="row">
-    <div class="col-md-6">
-      <ul id="randomTab" class="nav nav-tabs">
-        <li class="active"><a href="#seed" data-toggle="tab">基于随机种子的生成器</a></li>
-        <li><a href="#entropy" data-toggle="tab">基于熵池的生成器</a></li>
-      </ul>
-      <br>
-      <div id="randomTabContent" class="tab-content">
-        <div class="tab-pane fade in active" id="seed">
-          <form action="/getRandomNum" method="post" class="form-horizontal" role="form" onsubmit="return checkInput1()">
-            <div class="form-group">
-              <label class="col-sm-3 control-label">使用说明</label>
-              <div class="col-sm-9">
-                <span>
-                    这里是随机数生成算法的说明
-                </span>
-              </div>
+<div id="fill-parameters" class="row">
+  <div class="col-md-6">
+    <ul id="randomTab" class="nav nav-tabs">
+      <li class="active"><a href="#seed" data-toggle="tab">基于随机种子的生成器</a></li>
+      <li><a href="#entropy" data-toggle="tab">基于熵池的生成器</a></li>
+    </ul>
+    <br>
+    <div id="randomTabContent" class="tab-content">
+      <div class="tab-pane fade in active" id="seed">
+        <form action="/getRandomNum" method="post" class="form-horizontal" role="form" onsubmit="return checkInput1()">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">使用说明</label>
+            <div class="col-sm-9">
+              <span>
+                  这里是随机数生成算法的说明
+              </span>
             </div>
-            <div class="form-group">
-              <label for="seed" class="col-sm-3 control-label">随机种子</label>
-              <div class="col-sm-9">
-                <input required="required" type="number" min="1" class="form-control unfocus" id="seed" name="seed" placeholder="5201314" value="">
-                <span class="help-block">随机种子</span>
-              </div>
+          </div>
+          <div class="form-group">
+            <label for="seed" class="col-sm-3 control-label">随机种子</label>
+            <div class="col-sm-9">
+              <input required="required" type="number" min="1" class="form-control unfocus" id="seed" name="seed" placeholder="5201314" value="">
+              <span class="help-block">随机种子</span>
             </div>
-            <div class="form-group">
-              <label for="numToGet" class="col-sm-3 control-label">随机数个数</label>
-              <div class="col-sm-9">
-                <input required="required" type="number" min="1" class="form-control unfocus" id="numToGet" name="numToGet" placeholder="1" value="">
-                <span class="help-block">待获取的随机数个数</span>
-              </div>
+          </div>
+          <div class="form-group">
+            <label for="numToGet" class="col-sm-3 control-label">随机数个数</label>
+            <div class="col-sm-9">
+              <input required="required" type="number" min="1" class="form-control unfocus" id="numToGet" name="numToGet" placeholder="1" value="">
+              <span class="help-block">待获取的随机数个数</span>
             </div>
-            <div class="form-group">
-              <label for="numRange" class="col-sm-3 control-label">随机数范围</label>
-              <div class="col-sm-4">
-                <input required="required" type="number" min="1" class="form-control unfocus" id="numRangeMin" name="numRangeMin" placeholder="1" value="">
-                <span class="help-block">左闭右开</span>
-              </div>
-              <div class="col-sm-1">
-                <span>~</span>
-              </div>
-              <div class="col-sm-4">
-                <input required="required" type="number" min="1" class="form-control unfocus" id="numRangeMax" name="numRangeMax" placeholder="10" value="">
-              </div>
+          </div>
+          <div class="form-group">
+            <label for="numRange" class="col-sm-3 control-label">随机数范围</label>
+            <div class="col-sm-4">
+              <input required="required" type="number" min="1" class="form-control unfocus" id="numRangeMin" name="numRangeMin" placeholder="1" value="">
+              <span class="help-block">左闭右开</span>
             </div>
-            <div class="form-group">
-              <div class="col-sm-offset-3 col-sm-9">
-                <!--需要用input 的submit类型按钮-->
-                <input type="hidden" id="type1" name="type" value="1" />
-                <input type="submit" class="btn btn-create" value="生成">
-              </div>
+            <div class="col-sm-1">
+              <span>~</span>
             </div>
-          </form>
-        </div>
-        <div class="tab-pane fade" id="entropy">
-         <form action="/getRandomNum" method="post" class="form-horizontal" role="form" onsubmit="return checkInput2()">
-            <div class="form-group">
-              <label class="col-sm-3 control-label">使用说明</label>
-              <div class="col-sm-9">
-                <span>
-                    这里是随机数生成算法的说明
-                </span>
-              </div>
+            <div class="col-sm-4">
+              <input required="required" type="number" min="1" class="form-control unfocus" id="numRangeMax" name="numRangeMax" placeholder="10" value="">
             </div>
-            <div class="form-group">
-              <label for="numToGet" class="col-sm-3 control-label">随机数个数</label>
-              <div class="col-sm-9">
-                <input required="required" type="number" min="1" class="form-control unfocus" id="numToGetTxs" name="numToGet" placeholder="1" value="">
-                <span class="help-block">待获取的随机数个数</span>
-              </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+              <!--需要用input 的submit类型按钮-->
+              <input type="hidden" id="type1" name="type" value="1" />
+              <input type="submit" class="btn btn-create" value="生成">
             </div>
-            <div class="form-group">
-              <label for="numRange" class="col-sm-3 control-label">随机数范围</label>
-              <div class="col-sm-4">
-                <input required="required" type="number" min="1" class="form-control unfocus" id="numRangeMinTxs" name="numRangeMin" placeholder="1" value="">
-                <span class="help-block">左闭右开</span>
-              </div>
-              <div class="col-sm-1">
-                <span>~</span>
-              </div>
-              <div class="col-sm-4">
-                <input required="required" type="number" min="1" class="form-control unfocus" id="numRangeMaxTxs" name="numRangeMax" placeholder="10" value="">
-              </div>
+          </div>
+        </form>
+      </div>
+      <div class="tab-pane fade" id="entropy">
+       <form action="/getRandomNum" method="post" class="form-horizontal" role="form" onsubmit="return checkInput2()">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">使用说明</label>
+            <div class="col-sm-9">
+              <span>
+                  这里是随机数生成算法的说明
+              </span>
             </div>
-            <div class="form-group">
-              <div class="col-sm-offset-3 col-sm-9">
-                <!--需要用input 的submit类型按钮-->
-                <input type="hidden" id="type2" name="type" value="2" />
-                <input type="submit" class="btn btn-create" value="生成">
-              </div>
+          </div>
+          <div class="form-group">
+            <label for="numToGet" class="col-sm-3 control-label">随机数个数</label>
+            <div class="col-sm-9">
+              <input required="required" type="number" min="1" class="form-control unfocus" id="numToGetTxs" name="numToGet" placeholder="1" value="">
+              <span class="help-block">待获取的随机数个数</span>
             </div>
-          </form>
-        </div>
+          </div>
+          <div class="form-group">
+            <label for="numRange" class="col-sm-3 control-label">随机数范围</label>
+            <div class="col-sm-4">
+              <input required="required" type="number" min="1" class="form-control unfocus" id="numRangeMinTxs" name="numRangeMin" placeholder="1" value="">
+              <span class="help-block">左闭右开</span>
+            </div>
+            <div class="col-sm-1">
+              <span>~</span>
+            </div>
+            <div class="col-sm-4">
+              <input required="required" type="number" min="1" class="form-control unfocus" id="numRangeMaxTxs" name="numRangeMax" placeholder="10" value="">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+              <!--需要用input 的submit类型按钮-->
+              <input type="hidden" id="type2" name="type" value="2" />
+              <input type="submit" class="btn btn-create" value="生成">
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-
 $(function(){
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         // 获取已激活的标签页的名称

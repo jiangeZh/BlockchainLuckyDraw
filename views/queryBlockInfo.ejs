@@ -1,50 +1,41 @@
 <%- include header %>
-<div class="container">
-
-  <div class="page-header">
-    <a href=".">
-      <h1><i class="fa fa-ticket "></i> 基于 Bitcoin Blockchain 的抽奖系统</h1>
-    </a>
+<div id="raffle">
+  <% if (error) { %>
+  <div id="error-box" class="alert alert-danger">
+    <h5> <%= error %> </h5>
+    <p></p>
   </div>
+  <% } %>
 
-  <div id="raffle">
-    <% if (error) { %>
-    <div id="error-box" class="alert alert-danger">
-      <h5> <%= error %> </h5>
-      <p></p>
+  <div id="newestBlock" class="alert alert-success">
+    <div>
+      <h3>最新区块号:<%= newestBlock %></h3>
     </div>
-    <% } %>
-
-    <div id="newestBlock" class="alert alert-success">
+    <% if (blockInfo) { %>
       <div>
-        <h3>最新区块号:<%= newestBlock %></h3>
+        <h3><%= blockInfo %></h3>
       </div>
-      <% if (blockInfo) { %>
-        <div>
-          <h3><%= blockInfo %></h3>
-        </div>
-      <% } %>
-    </div>
+    <% } %>
   </div>
+</div>
 
 
-  <div id="fill-parameters" class="row">
-    <div class="col-md-6">
-      <form action="/queryBlockInfo" method="post" class="form-horizontal" role="form">
-        <div class="form-group">
-          <label for="blockNum" class="col-sm-3 control-label">区块号</label>
-          <div class="col-sm-9">
-            <input required="required" type="number" min="1" max="<%= newestBlock %>" class="form-control unfocus" id="blockNum" name="blockNum" placeholder="5201314" value="">
-            <span class="help-block">待查询的区块号</span>
-          </div>
+<div id="fill-parameters" class="row">
+  <div class="col-md-6">
+    <form action="/queryBlockInfo" method="post" class="form-horizontal" role="form">
+      <div class="form-group">
+        <label for="blockNum" class="col-sm-3 control-label">区块号</label>
+        <div class="col-sm-9">
+          <input required="required" type="number" min="1" max="<%= newestBlock %>" class="form-control unfocus" id="blockNum" name="blockNum" placeholder="5201314" value="">
+          <span class="help-block">待查询的区块号</span>
         </div>
-        <div class="form-group">
-          <div class="col-sm-offset-3 col-sm-9">
-            <button type="submit" class="btn btn-create">查询</button>
-          </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+          <button type="submit" class="btn btn-create">查询</button>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   </div>
 </div>
 

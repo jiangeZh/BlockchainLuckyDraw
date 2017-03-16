@@ -1,11 +1,6 @@
 <%- include header %>
 
-<div class="container" ng-app="myApp">
-  <div class="page-header">
-    <a href=".">
-      <h1><i class="fa fa-ticket "></i> 基于 Bitcoin Blockchain 的抽奖系统</h1>
-    </a>
-  </div>
+<div ng-app="myApp">
   <div class="col-md-6" id="drawTime">
     <form action="/createTask" method="post" class="form-horizontal" role="form">
       <div class="form-group">
@@ -39,7 +34,6 @@
   </div>
   <%- include drawTimeInput %>
 </div>
-
 
 <script src="javascripts/angularCommon.js"></script>
 <script>
