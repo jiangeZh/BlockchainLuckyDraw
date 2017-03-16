@@ -1,0 +1,43 @@
+  <div class="modal fade" id="drawTimeToggle" tabindex="-1" role="dialog" aria-labelledby="drawTimeToggle">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title" id="drawTimeToggle">开奖时机</h4>
+        </div>
+        <div class="modal-body">
+          <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#time" data-toggle="tab">指定开奖时间</a></li>
+            <li><a href="#block" data-toggle="tab">指定开奖区块号</a></li>
+          </ul>
+          <br>
+          <div id="myTabContent" class="tab-content">
+            <div class="col-md-8 tab-pane fade in active" id="time">
+              <div class="form-group">
+                <label for="datetimepicker" class="col-sm-4 control-label">最早开奖时间</label>
+                <div class="col-sm-8">
+                  <input required="required" type="text" class="form-control" id="datetimepicker" name="datetimepicker" readonly="readonly">
+                  <span class="help-block">当该时间后计算中奖者</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8 tab-pane fade" id="block">
+              <div class="form-group">
+                <label for="blockpicker" class="col-sm-4 control-label">开奖区块</label>
+                <div class="col-sm-8">
+                  <input required="required" type="number" min="0" class="form-control" id="blockpicker" name="blockpicker" placeholder="449388" value="449388">
+                  <span class="help-block">当出现该Block后计算中奖者</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br><br><br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+          <button type="button" id="drawTimeSubmit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span>保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+

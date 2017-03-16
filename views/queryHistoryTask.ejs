@@ -1,9 +1,9 @@
 <%- include header %>
-
-<table class="table table-striped">
-  <caption>查询历史任务</caption>
+<table class="table table-bordered">
+  <caption><h1>查询历史任务</h1></caption>
   <thead>
     <tr>
+      <th>创建时间</th>
       <th>开奖时间</th>
       <th>开奖区块</th>
       <th>奖品等级</th>
@@ -14,18 +14,88 @@
     </tr>
   </thead>
   <tbody>
-    <% for (var i = 0; i < tasks.length; ++i) { %>
-    <tr>
-      <td><%= tasks[i].time %></td>
-      <td><%= tasks[i].blockNum %></td>
-      <td><%= tasks[i].prizeInfo[0].prizeLevel %></td>
-      <td><%= tasks[i].prizeInfo[0].prizeDesc %></td>
-      <td><%= tasks[i].prizeInfo[0].prizeNum %></td>
-      <td><%= tasks[i].participatorNum %></td>
-      <td><%= tasks[i].prizeResult %></td>
-    </tr>
-    <% } %>
+    <%  for (var i = 0; i < tasks.length; ++i) { 
+          for (var j = 0; j < tasks[i].prizeInfos.length; ++j) { 
+            if (j == 0) { 
+    %> 
+        <tr>
+          <td rowspan="<%= tasks[i].prizeInfos.length %>"><%= tasks[i].createTime%></td>
+          <td rowspan="<%= tasks[i].prizeInfos.length %>"><%= tasks[i].time %></td>
+          <td rowspan="<%= tasks[i].prizeInfos.length %>"><%= tasks[i].blockNum %></td>
+          <td><%= tasks[i].prizeInfos[j].prizeLevel %></td>
+          <td><%= tasks[i].prizeInfos[j].prizeDesc %></td>
+          <td><%= tasks[i].prizeInfos[j].prizeNum %></td>
+          <td rowspan="<%= tasks[i].prizeInfos.length %>"><%= tasks[i].participatorNum %></td>
+          <% if (tasks[i].prizeResult != null) { %>
+            <td><%= tasks[i].prizeResult[j] %></td>
+          <% } else { %>
+            <td rowspan="<%= tasks[i].prizeInfos.length %>">未开奖</td>
+          <% } %>
+        </tr>
+    <%      } else { %>
+        <tr>
+          <td><%= tasks[i].prizeInfos[j].prizeLevel %></td>
+          <td><%= tasks[i].prizeInfos[j].prizeDesc %></td>
+          <td><%= tasks[i].prizeInfos[j].prizeNum %></td>
+          <% if (tasks[i].prizeResult != null) { %>
+          <td><%= tasks[i].prizeResult[j] %></td>
+          <% } %>
+        </tr>
+    <%  } } } %>
   </tbody>
 </table>
+
+<div style="text-align: center">
+  <ul class="pagination" id="page1" pageCount="<%=page.pageCount%>" pageNum="<%=page.pageNum%>" pageSize="<%=page.size%>" pageLimit="<%=page.limit%>" numberOfPages="<%=page.numberOfPages%>"></ul>
+</div>
+
+<script type="text/javascript">
+$(function(){
+
+    /*
+    //获得浏览器参数
+    $.extend({
+        getUrlVars: function(){
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for(var i = 0; i < hashes.length; i++){
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        },
+        getUrlVar: function(name){
+            return $.getUrlVars()[name];
+        }
+    });
+
+    //封装浏览器参数
+    var composeUrlParams=function(){
+        var param='';
+        $.each($.getUrlVars(), function(i, item) {
+            if(item!='p'){
+                var val=$.getUrlVar(item);
+                if(val) param += "&" + item+"="+val;
+            }
+        });
+        return param;
+    }
+    */
+
+    //分页功能
+    var page=$('#page1');
+    var options = {
+        currentPage:page.attr('pageNum'),
+        totalPages:page.attr('pageCount'),
+        numberOfPages:page.attr('numberOfPages'),
+        bootstrapMajorVersion:3,
+        pageUrl: function(type, page, current){
+            return "/queryHistoryTask?p="+page;
+        }
+    }
+    $('#page1').bootstrapPaginator(options);
+})
+</script>
 
 <%- include footer %>

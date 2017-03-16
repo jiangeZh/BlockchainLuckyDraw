@@ -10,8 +10,11 @@ var settings = require('./settings');
 var flash = require('connect-flash');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
-var GetDrawResult = require('./controllers/getDrawResult.js');
-
+var GetDrawResult = require('./util/getDrawResult.js');
+var EntropyCollector = require('./util/entropyCollector.js');
+var UnconformedTxsRandom = require('./util/unconformedTxsRandom.js');
+// for test
+var MurmurHash3 = require('./util/MurmurHash3.js');
 var app = express();
 
 app.use(session({
@@ -61,7 +64,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// 两秒后执行以上函数
 setInterval(GetDrawResult.execute, 5000);
+setInterval(EntropyCollector.execute, 10000);
 
 module.exports = app;

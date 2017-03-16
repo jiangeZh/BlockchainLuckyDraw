@@ -5,8 +5,9 @@ Login = require('../controllers/login.js'),
 Logout = require('../controllers/logout.js'),
 CreateTask = require('../controllers/createTask.js'),
 VerifyHistoryTask = require('../controllers/verifyHistoryTask.js'),
-QueryNewestBlock = require('../controllers/queryNewestBlock.js'),
+QueryBlockInfo = require('../controllers/queryBlockInfo.js'),
 QueryHistoryTask = require('../controllers/queryHistoryTask.js');
+GetRandomNum = require('../controllers/getRandomNum.js');
 
 module.exports = function(app) {
     // 首页
@@ -15,7 +16,8 @@ module.exports = function(app) {
             title: '主页',
             user: req.session.user, 
             success: req.flash('success').toString(),
-            error: req.flash('error').toString()
+            error: req.flash('error').toString(),
+            index: 0
 	    });
     });
 
@@ -50,14 +52,19 @@ module.exports = function(app) {
     app.post('/verifyHistoryTask', VerifyHistoryTask.post);
 
     // 查询最新区块号 
-    app.get('/queryNewestBlock', QueryNewestBlock.get);
+    app.get('/queryBlockInfo', QueryBlockInfo.get);
 
-    app.post('/queryNewestBlock', QueryNewestBlock.post);
+    app.post('/queryBlockInfo', QueryBlockInfo.post);
 
     // 查询历史任务
     app.get('/queryHistoryTask', QueryHistoryTask.get);
 
     app.post('/queryHistoryTask', QueryHistoryTask.post);
+
+    // 随机数生成器 
+    app.get('/getRandomNum', GetRandomNum.get);
+
+    app.post('/getRandomNum', GetRandomNum.post);
 
     function checkLogin(req, res, next) {
         if (!req.session.user) {

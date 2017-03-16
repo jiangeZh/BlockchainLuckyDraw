@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>BitLoot</title>
+  <title>BlockchainLuckyDraw</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="基于 Bitcoin Blockchain 的抽奖系统。">
   <link rel="canonical" href="http://www.x86cow.com/">
@@ -26,16 +26,12 @@
   <script src="javascripts/bootstrap.min.js"></script>
   <script src="javascripts/bootstrap-datetimepicker.min.js"></script>
   <script src="javascripts/bootstrap-datetimepicker.zh-CN.js"></script>
+  <script src="javascripts/bootstrap-paginator.min.js"></script>
   <script src="javascripts/sjcl.js"></script>
-  <script src="javascripts/bitloot.js"></script>
-  <script src="javascripts/common.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
 
 </head>
 <body>
-	<header>
-    	<h1><%= title %></h1>
-	</header>
-
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     	<div class="container-fluid">
     	<div class="navbar-header">
@@ -47,13 +43,14 @@
             <% if (user) { %>
             <li><a title="创建新抽奖任务" href="/createTask">创建新抽奖任务</a></li>
             <% } %>
-            <li><a title="验证历史抽奖结果 务" href="/verifyHistoryTask">验证历史抽奖结果</a></li>
-            <li><a title="查询最新区块号" href="/queryNewestBlock">查询最新区块号</a></li>
+            <li><a title="验证历史抽奖结果" href="/verifyHistoryTask">验证历史抽奖结果</a></li>
+            <li><a title="查询区块信息" href="/queryBlockInfo">查询区块信息</a></li>
             <li><a title="查询历史任务" href="/queryHistoryTask">查询历史任务</a></li>
+            <li><a title="随机数生成器" href="/getRandomNum">随机数生成器</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <% if (user) { %>
-                <li><a title="登出" href="/logout"><span class="glyphicon glyphicon-log-in"></span> 登出</a></li>
+                <li><a title="登出" href="/logout"><span class="glyphicon glyphicon-log-out"></span> 登出</a></li>
             <% } else { %>
                 <li><a title="登录" href="/login"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
             <% } %>

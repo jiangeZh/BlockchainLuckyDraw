@@ -7,20 +7,15 @@ function DrawTask(task) {
     // 所用的区块号，由时间戳来确定
     this.blockNum = task.blockNum;
 
-    // 奖品等级
-    this.prizeLevel = task.prizeLevel;
-
-    // 奖品描述
-    this.prizeDesc = task.prizeDesc;
-
-    // 奖品数量
-    this.prizeNum = task.prizeNum;
+    this.prizeInfos = task.prizeInfos;
 
     // 参与人数
     this.participatorNum = task.participatorNum;
 
     // 抽奖结果
     this.prizeResult = task.prizeResult;
+
+    this.createTime = task.createTime;
 };
 
 module.exports = DrawTask;
@@ -31,15 +26,10 @@ DrawTask.prototype.save = function(callback) {
     var task = {
         time: this.time,
         blockNum: this.blockNum,
-        prizeInfo: [
-            {
-                prizeLevel: this.prizeLevel,
-                prizeDesc: this.prizeDesc,
-                prizeNum: this.prizeNum
-            }
-        ],
+        prizeInfos: this.prizeInfos,
         participatorNum: this.participatorNum,
-        prizeResult: this.prizeResult
+        prizeResult: this.prizeResult,
+        createTime: this.createTime
     };
 
     //打开数据库
@@ -67,8 +57,8 @@ DrawTask.prototype.save = function(callback) {
     });
 };
 
-// 批量读取任务信息，后面要考虑下分页
-DrawTask.get = function(callback) {
+// 分页读取任务信息
+DrawTask.findPagination = function(obj, callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
@@ -80,12 +70,25 @@ DrawTask.get = function(callback) {
                 mongodb.close();
                 return callback(err);//错误，返回 err 信息
             }
-            collection.find().toArray( function(err, tasks) {
-                mongodb.close();
+
+            collection.count( function(err, count) {
                 if (err) {
+                    mongodb.close();
                     return callback(err);
                 }
-                callback(null, tasks);
+
+                var pageNumber = obj.pageNum || 1;
+                var resultsPerPage = obj.limit || 10;
+                var skipFrom = (pageNumber-1) * resultsPerPage;
+                var pageCount = Math.ceil(count/resultsPerPage);
+
+                collection.find({},{sort:{createTime:1}, skip:skipFrom, limit:resultsPerPage}).toArray( function(err, tasks) {
+                    mongodb.close();
+                    if (err) {
+                        return callback(err);
+                    }
+                    callback(null, tasks, pageCount);
+                });
             });
         });
     });
@@ -104,7 +107,7 @@ DrawTask.getUnfinishedDrawTasks = function(callback) {
                 mongodb.close();
                 return callback(err);//错误，返回 err 信息
             }
-            var whereStr = {"prizeResult":'未开奖'};
+            var whereStr = {"prizeResult":null};
             collection.find(whereStr).toArray( function(err, tasks) {
                 mongodb.close();
                 if (err) {
