@@ -4,6 +4,7 @@ var moment = require('moment');
 var DrawTask = require('../models/drawTask.js');
 var GetNewestBlock = require('./getNewestBlock.js');
 var LCGRandom = require('./LCGRandom.js');
+var UnconformedTxsRandom = require('./unconformedTxsRandom.js'); 
 
 var GetDrawResult = {
     execute: function() {
@@ -45,43 +46,59 @@ var GetDrawResult = {
 }
 
 function _getDrawResults(err, results) {
-   var newestblock = results[0];
-   var tasks = results[1];
-   for (var index in tasks) {
-       var task = tasks[index];
-       var timeStr = task['time'];
-       var targetTime, timeNow;
-       if (task['blockNum'] == null) {
-           targetTime = new Date(timeStr).getTime(); // 时间戳
-           timeNow = Date.now();
-           // 如果保证所选时间一定大于当前时间，由于后台不断轮询，因此目标区块为最新区块的下一个区块
-           if (targetTime <= timeNow) {
-               task['blockNum'] = newestblock + 1;
-                // 存db
-               DrawTask.updateResultById(task, null, function(err, result) {
-                   if (err)
-                       console.log(err);
-               });
-          }
-       }
-       // 满足开奖条件
-       var targetBlockHeight = task['blockNum'];
-       if (targetBlockHeight != null && targetBlockHeight <= newestblock) { 
-           if (timeStr == null) {
-               task['time'] = moment(Date.now()).format('YYYY-MM-DD HH:mm');
-           }
-           // 获取对应区块的信息
-           getNonce(task, function(err, task, nonce) {
-               getWinners(task, nonce, function(task, result) {
-                   // 存db
-                   DrawTask.updateResultById(task, result, function(err, result) {
-                       if (err)
-                           console.log(err);
-                   });
-               });
-           });
-       }
-   }
+    var newestblock = results[0];
+    var tasks = results[1];
+    for (var index in tasks) {
+        var task = tasks[index];
+        var timeStr = task['time'];
+
+        if (task['generator'] == 2) { // 时间一到就开奖
+            targetTime = new Date(timeStr).getTime(); // 时间戳
+            timeNow = Date.now();
+            if (targetTime <= timeNow) {
+                 getWinnersByEntropy(task, function(task, result) {
+                    // 存db
+                    DrawTask.updateResultById(task, result, function(err, result) {
+                        if (err)
+                            console.log(err);
+                    });
+                });
+            }
+        }
+        else {
+            var targetTime, timeNow;
+            if (task['blockNum'] == null) {
+                targetTime = new Date(timeStr).getTime(); // 时间戳
+                timeNow = Date.now();
+                // 如果保证所选时间一定大于当前时间，由于后台不断轮询，因此目标区块为最新区块的下一个区块
+                if (targetTime <= timeNow) {
+                    task['blockNum'] = newestblock + 1;
+                    // 存db
+                    DrawTask.updateResultById(task, null, function(err, result) {
+                        if (err)
+                            console.log(err);
+                    });
+                }
+            }
+            // 满足开奖条件
+            var targetBlockHeight = task['blockNum'];
+            if (targetBlockHeight != null && targetBlockHeight <= newestblock) { 
+                if (timeStr == null) {
+                    task['time'] = moment(Date.now()).format('YYYY-MM-DD HH:mm');
+                }
+                // 获取对应区块的信息
+                getNonce(task, function(err, task, nonce) {
+                    getWinnersByLCG(task, nonce, function(task, result) {
+                        // 存db
+                        DrawTask.updateResultById(task, result, function(err, result) {
+                            if (err)
+                                console.log(err);
+                        });
+                    });
+                });
+            }
+        }
+    }
 }
 
 function getNonce(task, callback) {
@@ -101,7 +118,7 @@ function getNonce(task, callback) {
     });
 }
 
-function getWinners(task, nonce, callback) {
+function getWinnersByLCG(task, nonce, callback) {
     var array = new Array();
     for (var i = 1; i <= task["participatorNum"]; ++i) {
         array.push(i);
@@ -111,9 +128,6 @@ function getWinners(task, nonce, callback) {
 	for (index in task['prizeInfos']) {
 		prizeNum += task['prizeInfos'][index]['prizeNum'];
 	}
-
-	console.log("nonce:"+nonce);
-	console.log("prizeNum:"+prizeNum);
 	
 	var resultArray = LCGRandom.randArray(nonce, prizeNum, array);
 
@@ -128,9 +142,36 @@ function getWinners(task, nonce, callback) {
         }
         results.push(array);
 	}
-    console.log(results);
 
     callback(task, results);
 }                    
+
+function getWinnersByEntropy(task, callback) {
+    var array = new Array();
+    for (var i = 1; i <= task["participatorNum"]; ++i) {
+        array.push(i);
+	}
+
+	var prizeNum = 0;
+	for (index in task['prizeInfos']) {
+		prizeNum += task['prizeInfos'][index]['prizeNum'];
+	}
+	
+	var resultArray = UnconformedTxsRandom.randIntArray(prizeNum, array);
+
+    var indexOfResult = 0;
+    var results = new Array();
+	for (indexOfInfo in task['prizeInfos']) {
+		var prizeNum = task['prizeInfos'][indexOfInfo]['prizeNum'];
+        var array = new Array();
+        for (var i = 0; i < prizeNum; ++i) {
+            array.push(resultArray[indexOfResult]);
+            indexOfResult++;
+        }
+        results.push(array);
+	}
+
+    callback(task, results);
+}
 
 module.exports = GetDrawResult;

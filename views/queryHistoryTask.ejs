@@ -5,6 +5,7 @@
       <th>创建时间</th>
       <th>开奖时间</th>
       <th>开奖区块</th>
+      <th>随机数生成器</th>
       <th>奖品等级</th>
       <th>奖品描述</th>
       <th>奖品数量</th>
@@ -21,6 +22,11 @@
           <td rowspan="<%= tasks[i].prizeInfos.length %>"><%= tasks[i].createTime%></td>
           <td rowspan="<%= tasks[i].prizeInfos.length %>"><%= tasks[i].time %></td>
           <td rowspan="<%= tasks[i].prizeInfos.length %>"><%= tasks[i].blockNum %></td>
+          <% if (tasks[i].generator == 1) { %>
+          <td rowspan="<%= tasks[i].prizeInfos.length %>">基于随机种子的生成器</td>
+          <% } else { %>
+          <td rowspan="<%= tasks[i].prizeInfos.length %>">基于熵池的生成器</td>
+          <% } %>
           <td><%= tasks[i].prizeInfos[j].prizeLevel %></td>
           <td><%= tasks[i].prizeInfos[j].prizeDesc %></td>
           <td><%= tasks[i].prizeInfos[j].prizeNum %></td>

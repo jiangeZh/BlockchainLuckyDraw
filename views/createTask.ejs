@@ -1,5 +1,15 @@
 <%- include header %>
 
+<div id="raffle">
+  <% if (error) { %>
+  <div id="error-box" class="alert alert-danger">
+    <h5> <%= error %> </h5>
+    <p></p>
+  </div>
+  <% } %>
+</div>
+
+
 <div ng-app="myApp">
   <div class="col-md-6" id="drawTime">
     <form action="/createTask" method="post" class="form-horizontal" role="form">
@@ -12,6 +22,24 @@
       </div>
         
       <%- include prizeInfos %>
+
+      <div class="form-group">
+        <label for="generator" class="col-sm-3 control-label">随机数生成器</label>
+        <div class="col-sm-9">
+          <select class="form-control" id="generator" name="generator">
+            <% if (error) { %>
+            <option value="1">基于nonce随机种子的生成器</option>
+            <option value="2" selected="selected">基于Unconformed Txs熵池的生成器</option>
+            <% } else { %>
+            <option value="1" selected="selected">基于nonce随机种子的生成器</option>
+            <option value="2">基于Unconformed Txs熵池的生成器</option>
+            <% } %>
+          </select>
+          <span class="help-block">随机数生成器</span>
+        </div>
+      </div>
+ 
+
       <div class="form-group">
         <label for="mantotal" class="col-sm-3 control-label">总人数</label>
         <div class="col-sm-9">
@@ -25,13 +53,7 @@
         </div>
       </div>
     </form>            
-    <% if (success) { %>
-       <%= success %>
-    <% } %>
-    <% if (error) { %>
-       <%= error %>
-    <% } %>
-  </div>
+ </div>
   <%- include drawTimeInput %>
 </div>
 

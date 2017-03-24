@@ -14,17 +14,19 @@ var CreateTask = {
 		var drawTime = req.body.drawTimeInput;
 			prizeInfos = JSON.parse(req.body.prizeInfos);
             mantotal = req.body.mantotal;
+            generator = req.body.generator;
             time = null;
             block = null;
-
-        console.log();
-        console.log(prizeInfos);
-        console.log(mantotal);
 
 		if (isNaN(drawTime)) {	// time
 			time = drawTime;
 		} else {
 			block = drawTime;
+		}
+
+		if (generator == 2 && time == null) {
+            req.flash('error', "熵池生成器的开奖时机必须为时间！");
+            return res.redirect('/createTask');
 		}
        
         var newTask = new DrawTask({
@@ -33,7 +35,8 @@ var CreateTask = {
             prizeInfos: prizeInfos,
 			participatorNum: mantotal,
             prizeResult: null,
-            createTime: Date.now()
+            createTime: Date.now(),
+            generator: generator
         });
 
         newTask.save(function (err, task) {

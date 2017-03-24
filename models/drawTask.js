@@ -7,6 +7,8 @@ function DrawTask(task) {
     // 所用的区块号，由时间戳来确定
     this.blockNum = task.blockNum;
 
+    this.generator = task.generator;
+
     this.prizeInfos = task.prizeInfos;
 
     // 参与人数
@@ -26,6 +28,7 @@ DrawTask.prototype.save = function(callback) {
     var task = {
         time: this.time,
         blockNum: this.blockNum,
+        generator: this.generator,
         prizeInfos: this.prizeInfos,
         participatorNum: this.participatorNum,
         prizeResult: this.prizeResult,
