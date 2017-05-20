@@ -37,7 +37,7 @@ var GetDrawResult = {
             }
             // 获取对应区块的信息
             getNonce(task, function(err, task, nonce) {
-                getWinners(task, nonce, function(task, result) {
+                getWinnersByLCG(task, nonce, function(task, result) {
                     callback(null, result);
                 });
             });
